@@ -1,0 +1,34 @@
+# ===== NodeJS =====
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ===== Environment variables =====
+.env
+
+# ===== OS files =====
+.DS_Store
+Thumbs.db
+
+# ===== Logs =====
+logs/
+*.log
+
+# ===== Upload files =====
+uploads/
+public/uploads/
+
+# ===== Build / cache =====
+dist/
+build/
+.cache/
+
+# ===== IDE / Editor =====
+.vscode/
+.idea/
+*.swp
+
+# ===== Swagger (optional) =====
+# Uncomment if you don't want to commit swagger.yaml
+# swagger.yaml

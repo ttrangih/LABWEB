@@ -1,0 +1,316 @@
+openapi: 3.0.3
+info:
+  title: Lab5 API
+  version: 1.0.0
+  description: CRUD Users/Products/Carts (SQL + ORM) + Email + Upload + Fetch API
+servers:
+  - url: http://localhost:3000
+
+tags:
+  - name: Users SQL
+  - name: Products SQL
+  - name: Carts SQL
+  - name: Users ORM
+  - name: Email
+  - name: Upload
+  - name: Fetch API
+
+paths:
+  /users-sql:
+    get:
+      tags: [Users SQL]
+      summary: Get all users (raw SQL)
+      responses:
+        "200":
+          description: OK
+    post:
+      tags: [Users SQL]
+      summary: Create user (raw SQL)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/UserCreate" }
+      responses:
+        "201":
+          description: Created
+
+  /users-sql/{id}:
+    put:
+      tags: [Users SQL]
+      summary: Update user by id (raw SQL)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/UserUpdate" }
+      responses:
+        "200": { description: OK }
+        "404": { description: Not found }
+    delete:
+      tags: [Users SQL]
+      summary: Delete user by id (raw SQL)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200": { description: OK }
+        "404": { description: Not found }
+
+  /products-sql:
+    get:
+      tags: [Products SQL]
+      summary: Get all products (raw SQL)
+      responses:
+        "200": { description: OK }
+    post:
+      tags: [Products SQL]
+      summary: Create product (raw SQL)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ProductCreate" }
+      responses:
+        "201": { description: Created }
+
+  /products-sql/{id}:
+    put:
+      tags: [Products SQL]
+      summary: Update product by id (raw SQL)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ProductUpdate" }
+      responses:
+        "200": { description: OK }
+        "404": { description: Not found }
+    delete:
+      tags: [Products SQL]
+      summary: Delete product by id (raw SQL)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200": { description: OK }
+        "404": { description: Not found }
+
+  /carts-sql/user/{userId}:
+    get:
+      tags: [Carts SQL]
+      summary: Get cart items by user id (raw SQL)
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          schema: { type: integer }
+      responses:
+        "200": { description: OK }
+
+  /carts-sql:
+    post:
+      tags: [Carts SQL]
+      summary: Add item to cart (raw SQL)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CartAdd" }
+      responses:
+        "201": { description: Created/Updated }
+
+  /carts-sql/{cartItemId}:
+    put:
+      tags: [Carts SQL]
+      summary: Update cart item quantity by cart_item_id (raw SQL)
+      parameters:
+        - in: path
+          name: cartItemId
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CartUpdate" }
+      responses:
+        "200": { description: OK }
+        "404": { description: Not found }
+    delete:
+      tags: [Carts SQL]
+      summary: Delete cart item by cart_item_id (raw SQL)
+      parameters:
+        - in: path
+          name: cartItemId
+          required: true
+          schema: { type: integer }
+      responses:
+        "200": { description: OK }
+        "404": { description: Not found }
+
+  /users-orm/health:
+    get:
+      tags: [Users ORM]
+      summary: ORM health check (sequelize.authenticate)
+      responses:
+        "200": { description: OK }
+
+  /users-orm:
+    get:
+      tags: [Users ORM]
+      summary: Get all users (ORM)
+      responses:
+        "200": { description: OK }
+    post:
+      tags: [Users ORM]
+      summary: Create user (ORM)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/UserCreate" }
+      responses:
+        "201": { description: Created }
+
+  /users-orm/{id}:
+    put:
+      tags: [Users ORM]
+      summary: Update user by id (ORM)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/UserUpdate" }
+      responses:
+        "200": { description: OK }
+        "404": { description: Not found }
+    delete:
+      tags: [Users ORM]
+      summary: Delete user by id (ORM)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200": { description: OK }
+        "404": { description: Not found }
+
+  /email:
+    post:
+      tags: [Email]
+      summary: Send email (nodemailer)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/EmailSend" }
+      responses:
+        "200": { description: OK }
+
+  /upload:
+    post:
+      tags: [Upload]
+      summary: Upload image (multipart/form-data)
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+      responses:
+        "200": { description: OK }
+
+  /upload/list:
+    get:
+      tags: [Upload]
+      summary: List uploaded files
+      responses:
+        "200": { description: OK }
+
+  /fetch-api/users:
+    get:
+      tags: [Fetch API]
+      summary: Fetch users from JSONPlaceholder and upsert into DB
+      responses:
+        "200": { description: OK }
+
+components:
+  schemas:
+    UserCreate:
+      type: object
+      required: [full_name, address]
+      properties:
+        full_name: { type: string, example: "Test User" }
+        address: { type: string, example: "HCM" }
+        registration_date: { type: string, format: date, example: "2025-12-01" }
+        email: { type: string, example: "test@gmail.com" }
+
+    UserUpdate:
+      type: object
+      properties:
+        full_name: { type: string }
+        address: { type: string }
+        registration_date: { type: string, format: date }
+        email: { type: string }
+
+    ProductCreate:
+      type: object
+      required: [product_name, price]
+      properties:
+        product_name: { type: string, example: "Milk Tea - Classic" }
+        price: { type: number, example: 25000 }
+        manufacturing_date: { type: string, format: date, example: "2025-09-25" }
+
+    ProductUpdate:
+      type: object
+      properties:
+        product_name: { type: string }
+        price: { type: number }
+        manufacturing_date: { type: string, format: date }
+
+    CartAdd:
+      type: object
+      required: [user_id, product_id]
+      properties:
+        user_id: { type: integer, example: 2 }
+        product_id: { type: integer, example: 5 }
+        quantity: { type: integer, example: 2 }
+
+    CartUpdate:
+      type: object
+      required: [quantity]
+      properties:
+        quantity: { type: integer, example: 5 }
+
+    EmailSend:
+      type: object
+      required: [to]
+      properties:
+        to: { type: string, example: "you@gmail.com" }
+        subject: { type: string, example: "Lab5 Test" }
+        text: { type: string, example: "Hello from Lab5" }
