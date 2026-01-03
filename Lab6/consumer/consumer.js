@@ -8,10 +8,11 @@ const QUEUE = 'messages';
   const ch = await conn.createChannel();
   await ch.assertQueue(QUEUE);
 
-  console.log('Waiting for messages...');
+  console.log('Consumer waiting for messages...');
+
   ch.consume(QUEUE, (msg) => {
     const data = JSON.parse(msg.content.toString());
-    console.log('Received:', data);
+    console.log(`Received from ${data.producer}:`, data);
     ch.ack(msg);
   });
 })();
